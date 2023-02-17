@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	cla "github.com/vault-thirteen/Hasher/Models/CommandLineArguments"
-	ht "github.com/vault-thirteen/Hasher/Models/HashType"
-	ot "github.com/vault-thirteen/Hasher/Models/ObjectType"
-	"github.com/vault-thirteen/Hasher/hash"
+	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
+	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
+	ot "github.com/vault-thirteen/Hasher/pkg/Models/ObjectType"
+	"github.com/vault-thirteen/Hasher/pkg/hash"
 )
 
 func calculateHash(args *cla.CommandLineArguments) (err error) {

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	a "github.com/vault-thirteen/Hasher/Models/Action"
-	cla "github.com/vault-thirteen/Hasher/Models/CommandLineArguments"
+	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
+	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
+	ver "github.com/vault-thirteen/Versioneer"
 )
 
 const UsageHint = `Usage:
@@ -34,6 +35,7 @@ const (
 func main() {
 	args, err := cla.New()
 	if err != nil {
+		showIntro()
 		showUsage()
 		os.Exit(1)
 		return
@@ -54,6 +56,14 @@ func mustBeNoError(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func showIntro() {
+	versioneer, err := ver.New()
+	mustBeNoError(err)
+	versioneer.ShowIntroText("")
+	versioneer.ShowComponentsInfoText()
+	fmt.Println()
 }
 
 func showUsage() {

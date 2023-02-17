@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	a "github.com/vault-thirteen/Hasher/Models/Action"
-	ht "github.com/vault-thirteen/Hasher/Models/HashType"
-	ot "github.com/vault-thirteen/Hasher/Models/ObjectType"
+	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
+	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
+	ot "github.com/vault-thirteen/Hasher/pkg/Models/ObjectType"
 	"github.com/vault-thirteen/auxie/file"
 )
 

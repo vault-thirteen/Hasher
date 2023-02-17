@@ -30,6 +30,9 @@ Change directory (CD) to a working directory before usage.
 
 Use the `build.bat` script included with the source code.
 
+## Installation
+`go install github.com/vault-thirteen/Hasher/cmd/hasher@latest`
+
 ## Why ?
 
 Even at this moment hash tools for Windows operating system are very poor. 
@@ -70,4 +73,4 @@ Unicode symbol, do not break the history of the humankind, the ASCII standard.
 ### ASCII
 ASCII Code Chart, 1967.
 
-![ASCII Code Chart](img/USASCII_code_chart_1967.png)
+![ASCII Code Chart](assets/img/USASCII_code_chart_1967.png)
