@@ -72,7 +72,7 @@ func checkCRC32HashesInFile(filePath string) (err error) {
 	}()
 
 	var (
-		r                             = reader.NewReader(f)
+		r                             = reader.New(f)
 		buf                           []byte
 		checkErr                      error
 		file                          string
@@ -162,7 +162,7 @@ func checkMD5HashesInFile(filePath string) (err error) {
 	}()
 
 	var (
-		r                             = reader.NewReader(f)
+		r                             = reader.New(f)
 		buf                           []byte
 		checkErr                      error
 		file                          string
@@ -252,7 +252,7 @@ func checkSHA256HashesInFile(filePath string) (err error) {
 	}()
 
 	var (
-		r                             = reader.NewReader(f)
+		r                             = reader.New(f)
 		buf                           []byte
 		checkErr                      error
 		file                          string
