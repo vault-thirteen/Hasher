@@ -13,3 +13,10 @@ github.com/vault-thirteen/auxie v0.10.2/go.mod h1:S32zo7hgrnOdRu/sTHgGOBsLX8Ur/r
 github.com/vault-thirteen/errorz v1.1.0 h1:ul4UsZfQWy5p6DZ4bAclQ14I/bm9YnGfAg3q++v5zxg=
 github.com/vault-thirteen/errorz v1.1.0/go.mod h1:EEqZH4OZWTXG14ZZSPFI7nzDqVMwWljDybNB9oY1zec=
 github.com/vault-thirteen/tester v1.1.0 h1:Fi2SHMjrNuAbUzbvnuKkh1uoaIxMvVNCU6WB3rpviHk=
+github.com/vault-thirteen/Versioneer v0.2.3 h1:TnpZvGGcsYr/SbKLikvMHDflf1B/9PLpFq06N1A9iBw=
+github.com/vault-thirteen/Versioneer v0.2.3/go.mod h1:Xz43/Wfil6nUvkYuTOct4PMBpyN9JlcbXQzT3J5Thys=
+github.com/vault-thirteen/auxie v0.12.1 h1:poIWeAkmr0n2FnJHsbQWnk547Zat754iz3Xy/Qj384k=
+github.com/vault-thirteen/auxie v0.12.1/go.mod h1:smR3DYfVXHoqynkCkPEa8X47i02QLkuJZUP1ooP2moc=
+github.com/vault-thirteen/errorz v1.1.0 h1:ul4UsZfQWy5p6DZ4bAclQ14I/bm9YnGfAg3q++v5zxg=
+github.com/vault-thirteen/errorz v1.1.0/go.mod h1:EEqZH4OZWTXG14ZZSPFI7nzDqVMwWljDybNB9oY1zec=
+github.com/vault-thirteen/tester v1.1.0 h1:Fi2SHMjrNuAbUzbvnuKkh1uoaIxMvVNCU6WB3rpviHk=
