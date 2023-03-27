@@ -3,8 +3,8 @@ module github.com/vault-thirteen/Hasher
 go 1.19
 
 require (
-	github.com/vault-thirteen/Versioneer v0.2.2
-	github.com/vault-thirteen/auxie v0.10.1
+	github.com/vault-thirteen/Versioneer v0.2.3
+	github.com/vault-thirteen/auxie v0.10.2
 	github.com/vault-thirteen/errorz v1.0.1
 )
 
