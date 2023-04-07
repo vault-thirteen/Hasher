@@ -5,9 +5,10 @@ A tool for calculating and checking hash sums of files.
 ## Supported Hash Sums
 
 At the moment this tool supports following hash sum algorithms:
-* CRC-32
-* MD-5
+* CRC32
+* MD5
 * SHA-256
+* Size
 
 ## Usage
 `hasher.exe [Action] [HashType] [ObjectType] [ObjectPath]`
@@ -16,15 +17,35 @@ At the moment this tool supports following hash sum algorithms:
 `hasher.exe Calculate CRC32 Folder "Images\Cats"`  
 `hasher.exe Check MD5 File MD5sums.txt`  
 
-### Notes
-Possible actions: Calculate, Check.  
-Possible hash types: CRC32, MD5, SHA256, Size.  
-Possible object types: File, Folder or Directory.  
+### Actions 
+(letter case is not important)
+* `Calculate`
+* `Check`
+
 If action name is omitted, the default one is used.  
-Default action is calculation.  
-Hash sum checking is available for a sum file only.  
-Letter case is not important.  
+The default action is calculation.  
+Hash sum calculation is available for files and folders.  
+Hash sum checking is available against a sum file only.  
+
+### Hash Types
+(letter case is not important)
+* `CRC32`
+* `MD5`
+* `SHA256`
+* `Size`
+
+`Size` hash type is a calculation of length in bytes.
+
+### Object Types
+(letter case is not important)
+* `File`
+* `Folder` or `Directory`  
+
+**Notes**
+  
+Before using the tool, ensure that you are in the correct folder.  
 Change directory (CD) to a working directory before usage.  
+Paths of hashed objects will be shown as relative to the current directory.  
 
 ## Building
 
