@@ -33,6 +33,8 @@ func calculateHashOfFile(args *cla.CommandLineArguments) (err error) {
 		return calculateFileHashMD5(args)
 	case ht.IdSHA256:
 		return calculateFileHashSHA256(args)
+	case ht.IdFileSize:
+		return calculateFileHashFileSize(args)
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -71,6 +73,17 @@ func calculateFileHashSHA256(args *cla.CommandLineArguments) (err error) {
 	return nil
 }
 
+func calculateFileHashFileSize(args *cla.CommandLineArguments) (err error) {
+	var sum int64
+	sum, err = hash.GetFileHashFileSize(args.ObjectPath())
+	if err != nil {
+		return err
+	}
+
+	printHashLine(strconv.FormatInt(sum, 10), filepath.Base(args.ObjectPath()))
+	return nil
+}
+
 func calculateHashOfFolder(args *cla.CommandLineArguments) (err error) {
 	switch args.HashType().ID() {
 	case ht.IdCRC32:
@@ -79,6 +92,8 @@ func calculateHashOfFolder(args *cla.CommandLineArguments) (err error) {
 		return calculateFolderHashMD5(args)
 	case ht.IdSHA256:
 		return calculateFolderHashSHA256(args)
+	case ht.IdFileSize:
+		return calculateFolderHashFileSize(args)
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -157,6 +172,17 @@ func calculateFolderHashSHA256(args *cla.CommandLineArguments) (err error) {
 	return nil
 }
 
+func calculateFolderHashFileSize(args *cla.CommandLineArguments) (err error) {
+	basePath := args.ObjectPath()
+
+	err = filepath.Walk(basePath, fileSizeDirWalker)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func sha256DirWalker(path string, fi os.FileInfo, err error) error {
 	if err != nil {
 		return err
@@ -173,6 +199,26 @@ func sha256DirWalker(path string, fi os.FileInfo, err error) error {
 	}
 
 	printHashLine(strings.ToUpper(hex.EncodeToString(sum[:])), path)
+
+	return nil
+}
+
+func fileSizeDirWalker(path string, fi os.FileInfo, err error) error {
+	if err != nil {
+		return err
+	}
+
+	if fi.IsDir() {
+		return nil
+	}
+
+	var sum int64
+	sum, err = hash.GetFileHashFileSize(path)
+	if err != nil {
+		return err
+	}
+
+	printHashLine(strconv.FormatInt(sum, 10), path)
 
 	return nil
 }

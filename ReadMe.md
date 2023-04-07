@@ -18,7 +18,7 @@ At the moment this tool supports following hash sum algorithms:
 
 ### Notes
 Possible actions: Calculate, Check.  
-Possible hash types: CRC32, MD5, SHA256.  
+Possible hash types: CRC32, MD5, SHA256, Size.  
 Possible object types: File, Folder or Directory.  
 If action name is omitted, the default one is used.  
 Default action is calculation.  

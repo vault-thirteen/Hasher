@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
@@ -18,7 +19,7 @@ Examples:
 
 Notes:
 	Possible actions: Calculate, Check.
-	Possible hash types: CRC32, MD5, SHA256.
+	Possible hash types: CRC32, MD5, SHA256, Size.
 	Possible object types: File, Folder or Directory.
 	If action name is omitted, the default one is used.
 	Default action is calculation.
@@ -35,6 +36,7 @@ const (
 func main() {
 	args, err := cla.New()
 	if err != nil {
+		log.Println(err)
 		showIntro()
 		showUsage()
 		os.Exit(1)

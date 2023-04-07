@@ -142,3 +142,13 @@ func GetFileHashSHA256(filePath string) (sum []byte, err error) {
 
 	return h.Sum(nil), nil
 }
+
+func GetFileHashFileSize(filePath string) (sum int64, err error) {
+	var fi os.FileInfo
+	fi, err = os.Stat(filePath)
+	if err != nil {
+		return sum, err
+	}
+
+	return fi.Size(), nil
+}

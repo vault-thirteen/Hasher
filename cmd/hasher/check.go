@@ -13,6 +13,7 @@ import (
 	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
 	ot "github.com/vault-thirteen/Hasher/pkg/Models/ObjectType"
 	"github.com/vault-thirteen/Hasher/pkg/hash"
+	"github.com/vault-thirteen/auxie/number"
 	"github.com/vault-thirteen/auxie/reader"
 	"github.com/vault-thirteen/errorz"
 )
@@ -53,6 +54,8 @@ func checkHashesInFile(args *cla.CommandLineArguments) (err error) {
 		return checkMD5HashesInFile(args.ObjectPath())
 	case ht.IdSHA256:
 		return checkSHA256HashesInFile(args.ObjectPath())
+	case ht.IdFileSize:
+		return checkFileSizeHashesInFile(args.ObjectPath())
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -306,6 +309,74 @@ func checkSHA256HashesInFile(filePath string) (err error) {
 	return nil
 }
 
+func checkFileSizeHashesInFile(filePath string) (err error) {
+	var f *os.File
+	f, err = os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		derr := f.Close()
+		if derr != nil {
+			err = errorz.Combine(err, derr)
+		}
+	}()
+
+	var (
+		r                             = reader.New(f)
+		buf                           []byte
+		checkErr                      error
+		file                          string
+		nGood, nBad, nTotal, nDamaged int
+	)
+
+	fmt.Println(TplHr)
+
+	for {
+		if nDamaged > DamagedEntriesCountLimit {
+			return errors.New(ErrDamagedEntriesCountLimitReached)
+		}
+
+		// Yes. Each line in the hash sum file must end with CR+LF.
+		// If you are a user of Unix, Linux, OS X, Mac OS or any other OS with
+		// non-standard line ends, please, check this article:
+		// https://en.wikipedia.org/wiki/Newline
+		buf, err = r.ReadLineEndingWithCRLF()
+		if err == nil {
+			file, checkErr = checkFileSizeLine(buf)
+			if checkErr != nil {
+				nBad++
+				if len(file) == 0 {
+					nDamaged++
+					file = "???"
+				}
+				fmt.Println(TplError, file)
+			} else {
+				nGood++
+				fmt.Println(TplOK, file)
+			}
+			nTotal++
+			continue
+		}
+
+		if err == io.EOF {
+			break
+		}
+
+		return err
+	}
+
+	fmt.Println(TplHr)
+	if (nTotal == nGood) && (nBad == 0) {
+		fmt.Println(MsgAllClear)
+	} else {
+		fmt.Println(MsgErrorsWereFound)
+	}
+	fmt.Println(fmt.Sprintf(TplSummary, nTotal, nGood, nBad))
+
+	return nil
+}
+
 func checkSHA256Line(buf []byte) (file string, err error) {
 	if len(buf) < 66 {
 		return file, errors.New(ErrDataIsDamaged)
@@ -322,6 +393,33 @@ func checkSHA256Line(buf []byte) (file string, err error) {
 
 	if sumA != strings.ToUpper(hex.EncodeToString(sumTmp)) {
 		err = fmt.Errorf(ErrChecksumMismatch, sumA, strings.ToUpper(hex.EncodeToString(sumTmp)))
+		return file, err
+	}
+
+	return file, nil
+}
+
+func checkFileSizeLine(buf []byte) (file string, err error) {
+	parts := strings.Split(string(buf), " ")
+	if len(parts) != 2 {
+		return file, errors.New(ErrDataIsDamaged)
+	}
+
+	var sumA int64
+	sumA, err = number.ParseInt64(parts[0])
+	if err != nil {
+		return file, err
+	}
+
+	var sumTmp int64
+	file = strings.TrimSpace(parts[1])
+	sumTmp, err = hash.GetFileHashFileSize(file)
+	if err != nil {
+		return file, err
+	}
+
+	if sumA != sumTmp {
+		err = fmt.Errorf(ErrChecksumMismatch, sumA, sumTmp)
 		return file, err
 	}
 
