@@ -13,8 +13,8 @@ const UsageHint = `Usage:
 	[Action] [HashType] [ObjectType] [ObjectPath]
 
 Examples:
-	hash.exe Calculate CRC32 Folder "Images\Cats"
-	hash.exe Check MD5 File MD5sums.txt
+	hasher.exe Calculate CRC32 Folder "Images\Cats"
+	hasher.exe Check MD5 File MD5sums.txt
 
 Notes:
 	Possible actions: Calculate, Check.
