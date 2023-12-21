@@ -7,7 +7,7 @@ import (
 
 	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
 	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
-	ver "github.com/vault-thirteen/Versioneer"
+	ver "github.com/vault-thirteen/auxie/Versioneer"
 )
 
 const UsageHint = `Usage:

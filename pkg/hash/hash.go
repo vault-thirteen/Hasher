@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/vault-thirteen/errorz"
+	ae "github.com/vault-thirteen/auxie/errors"
 )
 
 const (
@@ -23,7 +23,7 @@ func GetFileHashCRC32(filePath string) (sum uint32, err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
@@ -66,7 +66,7 @@ func GetFileHashMD5(filePath string) (sum []byte, err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
@@ -109,7 +109,7 @@ func GetFileHashSHA256(filePath string) (sum []byte, err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 

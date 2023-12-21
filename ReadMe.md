@@ -56,11 +56,11 @@ Use the `build.bat` script included with the source code.
 
 ## Why ?
 
-Even at this moment hash tools for Windows operating system are very poor. 
-The set of utilities which comes with Git for Windows contains hash tools for 
+Even at this moment hash tools for _Windows_ operating system are very poor. 
+The set of utilities which comes with _Git for Windows_ contains hash tools for 
 MD5 and SHA256, but support for good old CRC32 is absent. Moreover, there are 
-some bugs in the tools included with GNU Core Utilities embedded into Git for 
-Windows. 
+some bugs in the tools included with _GNU Core Utilities_ embedded into _Git for 
+Windows_. 
 
 ## Additional Notes
 
@@ -69,29 +69,29 @@ Checker reads lines with standard line end (CR+LF).
 If you do not agree with it, you should read the following article:  
 https://en.wikipedia.org/wiki/Newline
 
-Note that Go language is sly when it comes to reading text lines.
+Note that _Go_ language is sly when it comes to reading text lines.
 It provides methods to write OS-specific text, but it does not provide any 
-tools to read OS-specific text lines. Instead, Go languages gives freedom of 
+tools to read OS-specific text lines. Instead, _Go_ languages gives freedom of 
 choice.
 
 Imagine, how would you parse text which has new lines. Would you read it until 
-the LF (Line Feed) character as Unix does ? Or would you read it until the CR 
-(Carriage Return) symbol as Macintosh does ? What would you do if you 
+the LF (Line Feed) character as _Unix_ does ? Or would you read it until the CR 
+(Carriage Return) symbol as _Macintosh_ does ? What would you do if you 
 occasionally met a combination of them ? Would you see them as two lines, one 
 of which is empty, or should they be concatenated ? Too many questions arise 
 since the good old standard was broken by some sly "inventors" and "optimizers".
 
 Historically Carriage Return means the return of carriage. That is it.
 
-Historically Line Feed means movement of the carriage to the next line down the text. 
-That is it.
+Historically Line Feed means movement of the carriage to the next line down the 
+text. That is it.
 
 Further "inventions" in this field only lead to anarchy.
 
 If you want to "invent" a new 'New Line' symbol, create a new standalone 
-Unicode symbol, do not break the history of the humankind, the ASCII standard.
+Unicode symbol, do not break the history of the humankind, the _ASCII_ standard.
 
 ### ASCII
-ASCII Code Chart, 1967.
+_ASCII_ Code Chart, 1967.
 
 ![ASCII Code Chart](assets/img/USASCII_code_chart_1967.png)

@@ -13,9 +13,9 @@ import (
 	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
 	ot "github.com/vault-thirteen/Hasher/pkg/Models/ObjectType"
 	"github.com/vault-thirteen/Hasher/pkg/hash"
+	ae "github.com/vault-thirteen/auxie/errors"
 	"github.com/vault-thirteen/auxie/number"
 	"github.com/vault-thirteen/auxie/reader"
-	"github.com/vault-thirteen/errorz"
 )
 
 const (
@@ -70,7 +70,7 @@ func checkCRC32HashesInFile(filePath string) (err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
@@ -160,7 +160,7 @@ func checkMD5HashesInFile(filePath string) (err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
@@ -250,7 +250,7 @@ func checkSHA256HashesInFile(filePath string) (err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
@@ -318,7 +318,7 @@ func checkFileSizeHashesInFile(filePath string) (err error) {
 	defer func() {
 		derr := f.Close()
 		if derr != nil {
-			err = errorz.Combine(err, derr)
+			err = ae.Combine(err, derr)
 		}
 	}()
 
