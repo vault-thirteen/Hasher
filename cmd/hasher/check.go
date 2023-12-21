@@ -56,6 +56,8 @@ func checkHashesInFile(args *cla.CommandLineArguments) (err error) {
 		return checkSHA256HashesInFile(args.ObjectPath())
 	case ht.IdFileSize:
 		return checkFileSizeHashesInFile(args.ObjectPath())
+	case ht.IdFileExistence:
+		return checkFileExistenceHashesInFile(args.ObjectPath())
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -414,6 +416,101 @@ func checkFileSizeLine(buf []byte) (file string, err error) {
 	var sumTmp int64
 	file = strings.TrimSpace(parts[1])
 	sumTmp, err = hash.GetFileHashFileSize(file)
+	if err != nil {
+		return file, err
+	}
+
+	if sumA != sumTmp {
+		err = fmt.Errorf(ErrChecksumMismatch, sumA, sumTmp)
+		return file, err
+	}
+
+	return file, nil
+}
+
+func checkFileExistenceHashesInFile(filePath string) (err error) {
+	var f *os.File
+	f, err = os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		derr := f.Close()
+		if derr != nil {
+			err = ae.Combine(err, derr)
+		}
+	}()
+
+	var (
+		r                             = reader.New(f)
+		buf                           []byte
+		checkErr                      error
+		file                          string
+		nGood, nBad, nTotal, nDamaged int
+	)
+
+	fmt.Println(TplHr)
+
+	for {
+		if nDamaged > DamagedEntriesCountLimit {
+			return errors.New(ErrDamagedEntriesCountLimitReached)
+		}
+
+		// Yes. Each line in the hash sum file must end with CR+LF.
+		// If you are a user of Unix, Linux, OS X, Mac OS or any other OS with
+		// non-standard line ends, please, check this article:
+		// https://en.wikipedia.org/wiki/Newline
+		buf, err = r.ReadLineEndingWithCRLF()
+		if err == nil {
+			file, checkErr = checkFileExistenceLine(buf)
+			if checkErr != nil {
+				nBad++
+				if len(file) == 0 {
+					nDamaged++
+					file = "???"
+				}
+				fmt.Println(TplError, file)
+			} else {
+				nGood++
+				fmt.Println(TplOK, file)
+			}
+			nTotal++
+			continue
+		}
+
+		if err == io.EOF {
+			break
+		}
+
+		return err
+	}
+
+	fmt.Println(TplHr)
+	if (nTotal == nGood) && (nBad == 0) {
+		fmt.Println(MsgAllClear)
+	} else {
+		fmt.Println(MsgErrorsWereFound)
+	}
+	fmt.Println(fmt.Sprintf(TplSummary, nTotal, nGood, nBad))
+
+	return nil
+}
+
+func checkFileExistenceLine(buf []byte) (file string, err error) {
+	parts := strings.Split(string(buf), " ")
+	if len(parts) != 2 {
+		return file, errors.New(ErrDataIsDamaged)
+	}
+
+	var sumA bool
+	sumA, err = strconv.ParseBool(parts[0])
+	if err != nil {
+		return file, err
+	}
+
+	var sumTmp bool
+	file = strings.TrimSpace(parts[1])
+	sumTmp, err = hash.GetFileHashFileExistence(file)
 	if err != nil {
 		return file, err
 	}

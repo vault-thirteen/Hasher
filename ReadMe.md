@@ -1,6 +1,8 @@
 # Hasher
 
-A tool for calculating and checking hash sums of files.
+A tool for calculating and checking hash sums and parameters of files.
+
+As a side feature, this tool is able to check file size and existence.
 
 ## Supported Hash Sums
 
@@ -9,6 +11,7 @@ At the moment this tool supports following hash sum algorithms:
 * MD5
 * SHA-256
 * Size
+* Existence
 
 ## Usage
 `hasher.exe [Action] [HashType] [ObjectType] [ObjectPath]`
@@ -33,8 +36,14 @@ Hash sum checking is available against a sum file only.
 * `MD5`
 * `SHA256`
 * `Size`
+* `Existence`
 
-`Size` hash type is a calculation of length in bytes.
+**Notes**
+1. `Size` hash type is a calculation of length in bytes.
+
+
+2. `Existence` hash type is a recording of existence.  
+The result is set as a binary number – `1` for `True` and `0` for `False`.
 
 ### Object Types
 (letter case is not important)
@@ -44,7 +53,7 @@ Hash sum checking is available against a sum file only.
 **Notes**
   
 Before using the tool, ensure that you are in the correct folder.  
-Change directory (CD) to a working directory before usage.  
+Change directory (`CD`) to a working directory before usage.  
 Paths of hashed objects will be shown as relative to the current directory.  
 
 ## Building

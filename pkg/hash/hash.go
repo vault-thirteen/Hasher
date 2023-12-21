@@ -8,6 +8,7 @@ import (
 	"os"
 
 	ae "github.com/vault-thirteen/auxie/errors"
+	"github.com/vault-thirteen/auxie/file"
 )
 
 const (
@@ -151,4 +152,14 @@ func GetFileHashFileSize(filePath string) (sum int64, err error) {
 	}
 
 	return fi.Size(), nil
+}
+
+func GetFileHashFileExistence(filePath string) (sum bool, err error) {
+	var exists bool
+	exists, err = file.FileExists(filePath)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
 }

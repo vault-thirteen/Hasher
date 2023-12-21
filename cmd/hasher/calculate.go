@@ -12,6 +12,7 @@ import (
 	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
 	ot "github.com/vault-thirteen/Hasher/pkg/Models/ObjectType"
 	"github.com/vault-thirteen/Hasher/pkg/hash"
+	sc "github.com/vault-thirteen/Hasher/pkg/strconv"
 )
 
 func calculateHash(args *cla.CommandLineArguments) (err error) {
@@ -35,6 +36,8 @@ func calculateHashOfFile(args *cla.CommandLineArguments) (err error) {
 		return calculateFileHashSHA256(args)
 	case ht.IdFileSize:
 		return calculateFileHashFileSize(args)
+	case ht.IdFileExistence:
+		return calculateFileHashFileExistence(args)
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -84,6 +87,17 @@ func calculateFileHashFileSize(args *cla.CommandLineArguments) (err error) {
 	return nil
 }
 
+func calculateFileHashFileExistence(args *cla.CommandLineArguments) (err error) {
+	var sum bool
+	sum, err = hash.GetFileHashFileExistence(args.ObjectPath())
+	if err != nil {
+		return err
+	}
+
+	printHashLine(sc.FormatBooleanAsNumber(sum), filepath.Base(args.ObjectPath()))
+	return nil
+}
+
 func calculateHashOfFolder(args *cla.CommandLineArguments) (err error) {
 	switch args.HashType().ID() {
 	case ht.IdCRC32:
@@ -94,6 +108,8 @@ func calculateHashOfFolder(args *cla.CommandLineArguments) (err error) {
 		return calculateFolderHashSHA256(args)
 	case ht.IdFileSize:
 		return calculateFolderHashFileSize(args)
+	case ht.IdFileExistence:
+		return calculateFolderHashFileExistence(args)
 	default:
 		return fmt.Errorf(ht.ErrUnknown, args.HashType())
 	}
@@ -183,6 +199,17 @@ func calculateFolderHashFileSize(args *cla.CommandLineArguments) (err error) {
 	return nil
 }
 
+func calculateFolderHashFileExistence(args *cla.CommandLineArguments) (err error) {
+	basePath := args.ObjectPath()
+
+	err = filepath.Walk(basePath, fileExistenceDirWalker)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func sha256DirWalker(path string, fi os.FileInfo, err error) error {
 	if err != nil {
 		return err
@@ -219,6 +246,26 @@ func fileSizeDirWalker(path string, fi os.FileInfo, err error) error {
 	}
 
 	printHashLine(strconv.FormatInt(sum, 10), path)
+
+	return nil
+}
+
+func fileExistenceDirWalker(path string, fi os.FileInfo, err error) error {
+	if err != nil {
+		return err
+	}
+
+	if fi.IsDir() {
+		return nil
+	}
+
+	var sum bool
+	sum, err = hash.GetFileHashFileExistence(path)
+	if err != nil {
+		return err
+	}
+
+	printHashLine(sc.FormatBooleanAsNumber(sum), path)
 
 	return nil
 }

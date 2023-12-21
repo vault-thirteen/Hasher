@@ -6,17 +6,19 @@ import (
 )
 
 const (
-	IdCRC32    = 1
-	IdMD5      = 2
-	IdSHA256   = 3
-	IdFileSize = 4
+	IdCRC32         = 1
+	IdMD5           = 2
+	IdSHA256        = 3
+	IdFileSize      = 4
+	IdFileExistence = 5
 )
 
 const (
-	NameCRC32    = "CRC32"
-	NameMD5      = "MD5"
-	NameSHA256   = "SHA256"
-	NameFileSize = "SIZE"
+	NameCRC32         = "CRC32"
+	NameMD5           = "MD5"
+	NameSHA256        = "SHA256"
+	NameFileSize      = "SIZE"
+	NameFileExistence = "EXISTENCE"
 )
 
 const (
@@ -52,6 +54,12 @@ func New(hashTypeName string) (hashType *HashType, err error) {
 		return &HashType{
 			id:   IdFileSize,
 			name: NameFileSize,
+		}, nil
+
+	case NameFileExistence:
+		return &HashType{
+			id:   IdFileExistence,
+			name: NameFileExistence,
 		}, nil
 
 	default:

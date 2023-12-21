@@ -50,11 +50,6 @@ func New() (cla *CommandLineArguments, err error) {
 		return nil, err
 	}
 
-	err = ensureObjectExists(cla)
-	if err != nil {
-		return nil, err
-	}
-
 	// Fill the rest data.
 	cla.hashType, err = ht.New(computedArgs[1])
 	if err != nil {
@@ -64,6 +59,16 @@ func New() (cla *CommandLineArguments, err error) {
 	cla.action, err = a.New(computedArgs[0])
 	if err != nil {
 		return nil, err
+	}
+
+	// Some of the algorithms work with non-existent objects,
+	// so sometimes absent objects are not an error.
+	if (cla.action.ID() == a.IdCheck) ||
+		(cla.hashType.ID() != ht.IdFileExistence) {
+		err = ensureObjectExists(cla)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return cla, nil
