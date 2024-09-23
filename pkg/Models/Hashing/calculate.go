@@ -12,7 +12,7 @@ func calculateBinaryFileHash(filePath string, hti ht.HashTypeId) (sum []byte, er
 	var data []byte
 	data, err = af.GetFileContents(filePath)
 	if err != nil {
-		return sum, err
+		return nil, err
 	}
 
 	switch hti {
@@ -46,7 +46,7 @@ func getFileSize(filePath string) (fileSize int, err error) {
 	var fi os.FileInfo
 	fi, err = os.Stat(filePath)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 
 	x := fi.Size()

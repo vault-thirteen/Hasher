@@ -25,7 +25,7 @@ func (c *Check) AddFile(file *CheckedFile) {
 	c.Counter.Total++
 
 	if file == nil {
-		c.Counter.Damaged++
+		c.Counter.Bad++
 		return
 	}
 
@@ -39,11 +39,9 @@ func (c *Check) AddFile(file *CheckedFile) {
 }
 
 func (c *Check) PrintReport() {
-	nBD := c.Counter.Bad + c.Counter.Damaged
-
-	// IF all files are good.
-	if nBD == 0 {
-		fmt.Println(fmt.Sprintf(TplSummary, c.Counter.Total, c.Counter.Good, nBD))
+	// If all files are good.
+	if c.Counter.Bad == 0 {
+		fmt.Println(fmt.Sprintf(TplSummary, c.Counter.Total, c.Counter.Good, c.Counter.Bad))
 		fmt.Println(MsgAllClear)
 		return
 	}
@@ -69,5 +67,5 @@ func (c *Check) PrintReport() {
 
 	// 3. Summary.
 	fmt.Println(TplHr)
-	fmt.Println(fmt.Sprintf(TplSummary, c.Counter.Total, c.Counter.Good, nBD))
+	fmt.Println(fmt.Sprintf(TplSummary, c.Counter.Total, c.Counter.Good, c.Counter.Bad))
 }

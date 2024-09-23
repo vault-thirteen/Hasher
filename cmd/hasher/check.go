@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"io"
+	"log"
 	"os"
 
 	ch "github.com/vault-thirteen/Hasher/pkg/Models/Check"
@@ -15,6 +17,7 @@ import (
 
 const (
 	ErrFolderCheckIsNotPossible = "folder check is not possible, use file check"
+	ErrFErrorOnLine             = "Error on line %v."
 )
 
 func checkHash(args *cla.CommandLineArguments) (results *ch.Check, err error) {
@@ -51,10 +54,17 @@ func checkHashesInFile(args *cla.CommandLineArguments) (results *ch.Check, err e
 
 	var rdr = reader.New(f)
 	var line []byte
+	var lineN int = 1
 	results = ch.NewCheck()
 	var hashText string
 	var hash any
 	var result *ch.CheckedFile
+
+	defer func() {
+		if err != nil {
+			log.Println(fmt.Sprintf(ErrFErrorOnLine, lineN))
+		}
+	}()
 
 	for {
 		line, err = rdr.ReadLineEndingWithCRLF()
@@ -64,11 +74,6 @@ func checkHashesInFile(args *cla.CommandLineArguments) (results *ch.Check, err e
 			} else {
 				return nil, err
 			}
-		}
-
-		if len(line) == 0 {
-			results.AddFile(nil)
-			continue
 		}
 
 		result = &ch.CheckedFile{}
@@ -89,6 +94,7 @@ func checkHashesInFile(args *cla.CommandLineArguments) (results *ch.Check, err e
 		}
 
 		results.AddFile(result)
+		lineN++
 		continue
 	}
 

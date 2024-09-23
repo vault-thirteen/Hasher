@@ -41,65 +41,51 @@ func (h *Hashing) GetType() (ht ht.HashType) {
 
 func (h *Hashing) Calculate(file string) (result *HashingResult, err error) {
 	var data any
+	var resultType HashingResultType
 
 	switch h.typ.ID() {
 	case ht.Id_FileExistence:
+		resultType = HashingResultType_Boolean
 		data, err = checkFileExistence(file)
 		if err != nil {
 			return nil, err
 		}
 
-		result, err = NewHashingResult(data, HashingResultType_Boolean)
-		if err != nil {
-			return nil, err
-		}
-
 	case ht.Id_FileSize:
+		resultType = HashingResultType_Integer
 		data, err = getFileSize(file)
 		if err != nil {
 			return nil, err
 		}
 
-		result, err = NewHashingResult(data, HashingResultType_Integer)
-		if err != nil {
-			return nil, err
-		}
-
 	case ht.Id_CRC32:
+		resultType = HashingResultType_Binary
 		data, err = calculateBinaryFileHash(file, ht.Id_CRC32)
 		if err != nil {
 			return nil, err
 		}
 
-		result, err = NewHashingResult(data, HashingResultType_Binary)
-		if err != nil {
-			return nil, err
-		}
-
 	case ht.Id_MD5:
+		resultType = HashingResultType_Binary
 		data, err = calculateBinaryFileHash(file, ht.Id_MD5)
 		if err != nil {
 			return nil, err
 		}
 
-		result, err = NewHashingResult(data, HashingResultType_Binary)
-		if err != nil {
-			return nil, err
-		}
-
 	case ht.Id_SHA256:
+		resultType = HashingResultType_Binary
 		data, err = calculateBinaryFileHash(file, ht.Id_SHA256)
-		if err != nil {
-			return nil, err
-		}
-
-		result, err = NewHashingResult(data, HashingResultType_Binary)
 		if err != nil {
 			return nil, err
 		}
 
 	default:
 		return nil, c.Error(ht.ErrUnknownHashType)
+	}
+
+	result, err = NewHashingResult(data, resultType)
+	if err != nil {
+		return nil, err
 	}
 
 	return result, nil
@@ -188,6 +174,7 @@ func (h *Hashing) ParseFileLine(line []byte) (hashText string, filePath string, 
 		return hashText, filePath, nil
 	}
 
+	// Hash sum is not a byte array.
 	var p1, p2 string
 	p1, p2, err = splitLine(line)
 	if err != nil {

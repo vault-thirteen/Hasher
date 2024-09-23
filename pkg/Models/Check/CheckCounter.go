@@ -1,8 +1,7 @@
 package ch
 
 type CheckCounter struct {
-	Good    int
-	Bad     int
-	Damaged int
-	Total   int
+	Good  int
+	Bad   int
+	Total int
 }

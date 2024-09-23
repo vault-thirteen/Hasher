@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	ErrSyntax           = "syntax error"
-	ErrObjectIsNotFound = "object is not found"
+	ErrSyntax           = "syntax error in command line arguments"
+	ErrObjectIsNotFound = "target object is not found"
 )
 
 type CommandLineArguments struct {

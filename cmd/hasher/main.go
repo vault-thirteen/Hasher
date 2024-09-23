@@ -34,8 +34,8 @@ Notes:
 func main() {
 	args, err := cla.New()
 	if err != nil {
-		log.Println(err)
 		showIntro()
+		log.Println(err)
 		showUsage()
 		os.Exit(1)
 		return
@@ -72,7 +72,7 @@ func work(args *cla.CommandLineArguments) (err error) {
 
 func mustBeNoError(err error) {
 	if err != nil {
-		panic(err)
+		log.Fatalln(err.Error())
 	}
 }
 
