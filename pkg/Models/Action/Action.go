@@ -1,61 +1,39 @@
 package a
 
 import (
-	"fmt"
 	"strings"
+
+	c "github.com/vault-thirteen/Hasher/pkg/Models/common"
 )
 
 const (
-	IdCalculate = 1
-	IdCheck     = 2
-	IdDefault   = IdCalculate
-)
-
-const (
-	NameCalculate = "CALCULATE"
-	NameCheck     = "CHECK"
-	NameEmpty     = ""
-	NameDefault   = NameCalculate
-)
-
-const (
-	ErrUnknown = "action is unknown: %v"
+	ErrUnknownAction = "action is unknown"
 )
 
 type Action struct {
-	id   byte
-	name string
+	id   ActionId
+	name ActionName
 }
 
-func New(actionName string) (action *Action, err error) {
-	switch strings.ToUpper(actionName) {
-	case NameCalculate:
-		return &Action{
-			id:   IdCalculate,
-			name: NameCalculate,
-		}, nil
-
-	case NameCheck:
-		return &Action{
-			id:   IdCheck,
-			name: NameCheck,
-		}, nil
-
-	case NameEmpty:
-		return &Action{
-			id:   IdDefault,
-			name: NameDefault,
-		}, nil
-
+func New(actionName string) (a *Action, err error) {
+	x := ActionName(strings.ToUpper(actionName))
+	switch x {
+	case Name_Calculate:
+		a = &Action{id: Id_Calculate, name: Name_Calculate}
+	case Name_Check:
+		a = &Action{id: Id_Check, name: Name_Check}
+	case Name_Empty:
+		a = &Action{id: Id_Default, name: Name_Default}
 	default:
-		return nil, fmt.Errorf(ErrUnknown, actionName)
+		return nil, c.ErrorA1(ErrUnknownAction, actionName)
 	}
+	return a, nil
 }
 
-func (a *Action) ID() (id byte) {
+func (a *Action) ID() (id ActionId) {
 	return a.id
 }
 
-func (a *Action) Name() (name string) {
+func (a *Action) Name() (name ActionName) {
 	return a.name
 }

@@ -1,59 +1,43 @@
 package ot
 
 import (
-	"fmt"
 	"strings"
+
+	c "github.com/vault-thirteen/Hasher/pkg/Models/common"
 )
 
 const (
-	IdFile   = 1
-	IdFolder = 2
-)
-
-const (
-	NameFile      = "FILE"
-	NameFolder    = "FOLDER"
-	NameDirectory = "DIRECTORY"
-)
-
-const (
-	ErrUnknown = "object type is unknown: %v"
+	ErrUnknownObjectType = "unknown object type"
 )
 
 type ObjectType struct {
-	id   byte
-	name string
+	id   ObjectTypeId
+	name ObjectTypeName
 }
 
-func New(objectTypeName string) (objectType *ObjectType, err error) {
-	switch strings.ToUpper(objectTypeName) {
-	case NameFile:
-		return &ObjectType{
-			id:   IdFile,
-			name: NameFile,
-		}, nil
+func New(objectTypeName ObjectTypeName) (ot *ObjectType, err error) {
+	return NewByName(objectTypeName)
+}
 
-	case NameFolder:
-		return &ObjectType{
-			id:   IdFolder,
-			name: NameFolder,
-		}, nil
-
-	case NameDirectory:
-		return &ObjectType{
-			id:   IdFolder,
-			name: NameFolder,
-		}, nil
-
+func NewByName(objectTypeName ObjectTypeName) (ot *ObjectType, err error) {
+	x := ObjectTypeName(strings.ToUpper(string(objectTypeName)))
+	switch x {
+	case Name_File:
+		ot = &ObjectType{id: Id_File, name: Name_File}
+	case Name_Folder:
+		ot = &ObjectType{id: Id_Folder, name: Name_Folder}
+	case Name_Directory:
+		ot = &ObjectType{id: Id_Folder, name: Name_Folder}
 	default:
-		return nil, fmt.Errorf(ErrUnknown, objectTypeName)
+		return nil, c.ErrorS1(ErrUnknownObjectType, objectTypeName)
 	}
+	return ot, nil
 }
 
-func (ot *ObjectType) ID() (id byte) {
+func (ot *ObjectType) ID() (id ObjectTypeId) {
 	return ot.id
 }
 
-func (ot *ObjectType) Name() (name string) {
+func (ot *ObjectType) Name() (name ObjectTypeName) {
 	return ot.name
 }

@@ -6,7 +6,9 @@ import (
 	"os"
 
 	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
+	ch "github.com/vault-thirteen/Hasher/pkg/Models/Check"
 	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
+	c "github.com/vault-thirteen/Hasher/pkg/Models/common"
 	ver "github.com/vault-thirteen/auxie/Versioneer"
 )
 
@@ -29,10 +31,6 @@ Notes:
 	Checker reads lines with standard line end (CR+LF).
 	Change directory (CD) to a working directory before usage.`
 
-const (
-	OutputFormat = "%v %s\r\n" // [1]=Sum, [2]=ObjectName.
-)
-
 func main() {
 	args, err := cla.New()
 	if err != nil {
@@ -43,15 +41,33 @@ func main() {
 		return
 	}
 
-	switch args.Action().ID() {
-	case a.IdCalculate:
-		err = calculateHash(args)
-	case a.IdCheck:
-		err = checkHash(args)
-	default:
-		err = fmt.Errorf(a.ErrUnknown, args.Action())
-	}
+	err = work(args)
 	mustBeNoError(err)
+}
+
+func work(args *cla.CommandLineArguments) (err error) {
+	switch args.Action().ID() {
+	case a.Id_Calculate:
+		err = calculateHash(args)
+		if err != nil {
+			return err
+		}
+
+	case a.Id_Check:
+		var checkResults *ch.Check
+		checkResults, err = checkHash(args)
+		if err != nil {
+			return err
+		}
+
+		checkResults.PrintReport()
+
+	default:
+		err = c.ErrorA1(a.ErrUnknownAction, args.Action())
+		return err
+	}
+
+	return nil
 }
 
 func mustBeNoError(err error) {
@@ -70,8 +86,4 @@ func showIntro() {
 
 func showUsage() {
 	fmt.Println(UsageHint)
-}
-
-func printHashLine(sum any, fileRelPath string) {
-	fmt.Printf(OutputFormat, sum, fileRelPath)
 }
