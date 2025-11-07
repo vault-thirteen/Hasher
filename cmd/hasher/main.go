@@ -9,7 +9,7 @@ import (
 	ch "github.com/vault-thirteen/Hasher/pkg/Models/Check"
 	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
 	c "github.com/vault-thirteen/Hasher/pkg/Models/common"
-	ver "github.com/vault-thirteen/auxie/Versioneer"
+	ver "github.com/vault-thirteen/auxie/Versioneer/classes/Versioneer"
 )
 
 const UsageHint = `Usage:
