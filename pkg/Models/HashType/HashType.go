@@ -34,6 +34,8 @@ func NewByName(hashTypeName HashTypeName) (ht *HashType, err error) {
 		ht = &HashType{id: Id_CRC32, name: Name_CRC32, isBinary: true, sumSize: hs.HashSize_CRC32}
 	case Name_MD5:
 		ht = &HashType{id: Id_MD5, name: Name_MD5, isBinary: true, sumSize: hs.HashSize_MD5}
+	case Name_SHA1:
+		ht = &HashType{id: Id_SHA1, name: Name_SHA1, isBinary: true, sumSize: hs.HashSize_SHA1}
 	case Name_SHA256:
 		ht = &HashType{id: Id_SHA256, name: Name_SHA256, isBinary: true, sumSize: hs.HashSize_SHA256}
 	default:

@@ -21,7 +21,7 @@ func calculateHash(args *cla.CommandLineArguments) (err error) {
 }
 
 func calculateHashOfFile(args *cla.CommandLineArguments) (err error) {
-	file := args.ObjectPath()
+	filePath := args.ObjectPath()
 
 	var hasher *h.Hashing
 	hasher, err = h.NewHashing(args.HashType().ID())
@@ -30,12 +30,12 @@ func calculateHashOfFile(args *cla.CommandLineArguments) (err error) {
 	}
 
 	var result *h.HashingResult
-	result, err = hasher.Calculate(file)
+	result, err = hasher.Calculate(filePath)
 	if err != nil {
 		return err
 	}
 
-	c.PrintHashLine(result.ToString(), filepath.Base(file))
+	c.PrintHashLine(result.ToString(), filepath.Base(filePath))
 	return nil
 }
 

@@ -4,29 +4,69 @@ import (
 	"os"
 
 	ht "github.com/vault-thirteen/Hasher/pkg/Models/HashType"
+	"github.com/vault-thirteen/auxie/errors"
 	af "github.com/vault-thirteen/auxie/file"
 	ah "github.com/vault-thirteen/auxie/hash"
 )
 
 func calculateBinaryFileHash(filePath string, hti ht.HashTypeId) (sum []byte, err error) {
-	var data []byte
-	data, err = af.GetFileContents(filePath)
+	var file *os.File
+	file, err = os.Open(filePath)
 	if err != nil {
 		return nil, err
 	}
 
+	defer func() {
+		derr := file.Close()
+		if derr != nil {
+			err = errors.Combine(err, derr)
+		}
+	}()
+
 	switch hti {
 	case ht.Id_CRC32:
-		x, _ := ah.CalculateCrc32(data)
-		sum = x[:]
+		{
+			var x ah.Crc32Sum
+			x, _, err = ah.CalculateCrc32S(file)
+			if err != nil {
+				return nil, err
+			}
+
+			sum = x[:]
+		}
 
 	case ht.Id_MD5:
-		x, _ := ah.CalculateMd5(data)
-		sum = x[:]
+		{
+			var x ah.Md5Sum
+			x, _, err = ah.CalculateMd5S(file)
+			if err != nil {
+				return nil, err
+			}
+
+			sum = x[:]
+		}
+
+	case ht.Id_SHA1:
+		{
+			var x ah.Sha1Sum
+			x, _, err = ah.CalculateSha1S(file)
+			if err != nil {
+				return nil, err
+			}
+
+			sum = x[:]
+		}
 
 	case ht.Id_SHA256:
-		x, _ := ah.CalculateSha256(data)
-		sum = x[:]
+		{
+			var x ah.Sha256Sum
+			x, _, err = ah.CalculateSha256S(file)
+			if err != nil {
+				return nil, err
+			}
+
+			sum = x[:]
+		}
 	}
 
 	return sum, nil

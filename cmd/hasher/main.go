@@ -21,7 +21,7 @@ Examples:
 
 Notes:
 	Possible actions: Calculate, Check.
-	Possible hash types: CRC32, MD5, SHA256, Size, Existence.
+	Possible hash types: CRC32, MD5, SHA1, SHA256, Size, Existence.
 	Possible object types: File, Folder or Directory.
 	If action name is omitted, the default one is used.
 	Default action is calculation.

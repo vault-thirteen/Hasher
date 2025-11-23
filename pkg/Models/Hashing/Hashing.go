@@ -39,42 +39,49 @@ func (h *Hashing) GetType() (ht ht.HashType) {
 	return *(h.typ)
 }
 
-func (h *Hashing) Calculate(file string) (result *HashingResult, err error) {
+func (h *Hashing) Calculate(filePath string) (result *HashingResult, err error) {
 	var data any
 	var resultType HashingResultType
 
 	switch h.typ.ID() {
 	case ht.Id_FileExistence:
 		resultType = HashingResultType_Boolean
-		data, err = checkFileExistence(file)
+		data, err = checkFileExistence(filePath)
 		if err != nil {
 			return nil, err
 		}
 
 	case ht.Id_FileSize:
 		resultType = HashingResultType_Integer
-		data, err = getFileSize(file)
+		data, err = getFileSize(filePath)
 		if err != nil {
 			return nil, err
 		}
 
 	case ht.Id_CRC32:
 		resultType = HashingResultType_Binary
-		data, err = calculateBinaryFileHash(file, ht.Id_CRC32)
+		data, err = calculateBinaryFileHash(filePath, ht.Id_CRC32)
 		if err != nil {
 			return nil, err
 		}
 
 	case ht.Id_MD5:
 		resultType = HashingResultType_Binary
-		data, err = calculateBinaryFileHash(file, ht.Id_MD5)
+		data, err = calculateBinaryFileHash(filePath, ht.Id_MD5)
+		if err != nil {
+			return nil, err
+		}
+
+	case ht.Id_SHA1:
+		resultType = HashingResultType_Binary
+		data, err = calculateBinaryFileHash(filePath, ht.Id_SHA1)
 		if err != nil {
 			return nil, err
 		}
 
 	case ht.Id_SHA256:
 		resultType = HashingResultType_Binary
-		data, err = calculateBinaryFileHash(file, ht.Id_SHA256)
+		data, err = calculateBinaryFileHash(filePath, ht.Id_SHA256)
 		if err != nil {
 			return nil, err
 		}
@@ -91,9 +98,9 @@ func (h *Hashing) Calculate(file string) (result *HashingResult, err error) {
 	return result, nil
 }
 
-func (h *Hashing) Verify(file string, value any) (isEqual bool, err error) {
+func (h *Hashing) Verify(filePath string, value any) (isEqual bool, err error) {
 	var result *HashingResult
-	result, err = h.Calculate(file)
+	result, err = h.Calculate(filePath)
 	if err != nil {
 		return false, err
 	}
@@ -123,6 +130,7 @@ func (h *Hashing) ParseHash(hashText string) (hashValue any, err error) {
 
 	case ht.Id_CRC32:
 	case ht.Id_MD5:
+	case ht.Id_SHA1:
 	case ht.Id_SHA256:
 
 	default:

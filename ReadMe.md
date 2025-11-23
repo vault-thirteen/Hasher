@@ -9,6 +9,7 @@ As a side feature, this tool is able to check file size and existence.
 At the moment this tool supports following hash sum algorithms:
 * CRC32
 * MD5
+* SHA-1
 * SHA-256
 * Size
 * Existence
@@ -34,6 +35,7 @@ Hash sum checking is available against a sum file only.
 (letter case is not important)
 * `CRC32`
 * `MD5`
+* `SHA1`
 * `SHA256`
 * `Size`
 * `Existence`
