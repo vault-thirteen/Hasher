@@ -1,8 +1,8 @@
 module github.com/vault-thirteen/Hasher
 
-go 1.24.10
+go 1.24.11
 
-require github.com/vault-thirteen/auxie v0.31.0
+require github.com/vault-thirteen/auxie v0.31.1
 
 require (
 	github.com/kr/pretty v0.3.1 // indirect
