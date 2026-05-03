@@ -5,11 +5,12 @@ import (
 	"log"
 	"os"
 
+	ver "github.com/vault-thirteen/auxie/Versioneer/classes/Versioneer"
+
 	a "github.com/vault-thirteen/Hasher/pkg/Models/Action"
 	ch "github.com/vault-thirteen/Hasher/pkg/Models/Check"
 	cla "github.com/vault-thirteen/Hasher/pkg/Models/CommandLineArguments"
 	c "github.com/vault-thirteen/Hasher/pkg/Models/common"
-	ver "github.com/vault-thirteen/auxie/Versioneer/classes/Versioneer"
 )
 
 const UsageHint = `Usage:
@@ -77,7 +78,7 @@ func mustBeNoError(err error) {
 }
 
 func showIntro() {
-	versioneer, err := ver.New()
+	versioneer, err := ver.New(false)
 	mustBeNoError(err)
 	versioneer.ShowIntroText("")
 	versioneer.ShowComponentsInfoText()
